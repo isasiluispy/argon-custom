@@ -13,31 +13,30 @@ export class ResourceService<T extends Resource> {
   constructor(
     private httpClient: HttpClient,
     private url: string,
-    private endpoint: string,
     private serializer: Serializer) {
   }
 
   public create(item: T): Observable<T> {
     return this.httpClient
-      .post<T>(`${this.url}/${this.endpoint}/`, this.serializer.toJson(item))
+      .post<T>(`${this.url}/`, this.serializer.toJson(item))
       .pipe(map(data => this.serializer.fromJson(data) as T));
   }
 
   public update(item: T): Observable<T> {
     return this.httpClient
-      .put<T>(`${this.url}/${this.endpoint}/${item.id}/`,
+      .put<T>(`${this.url}/${item.id}/`,
         this.serializer.toJson(item))
       .pipe(map(data => this.serializer.fromJson(data) as T));
   }
 
   read(id: number): Observable<T> {
     return this.httpClient
-      .get(`${this.url}/${this.endpoint}/${id}/`)
+      .get(`${this.url}/${id}/`)
       .pipe(map((data: any) => this.serializer.fromJson(data) as T));
   }
 
   list(queryOptions?: QueryOptions): Observable<T[]> {
-    let url = `${this.url}/${this.endpoint}/`;
+    let url = `${this.url}/`;
     if (queryOptions) {
       url += `?${queryOptions.toQueryString()}`;
     }
@@ -49,7 +48,7 @@ export class ResourceService<T extends Resource> {
 
   delete(id: number) {
     return this.httpClient
-      .delete(`${this.url}/${this.endpoint}/${id}/`);
+      .delete(`${this.url}/${id}/`);
   }
 
   private convertData(data: any): T[] {
