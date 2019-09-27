@@ -13,6 +13,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppRoutingModule} from './app.routing';
 import {ComponentsModule} from './components/components.module';
 import {TokenInterceptor} from './services/token.interceptor';
+import {HttpErrorInterceptor} from './services/http-error.interceptor';
 
 
 @NgModule({
@@ -34,6 +35,11 @@ import {TokenInterceptor} from './services/token.interceptor';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
       multi: true
     }
   ],
